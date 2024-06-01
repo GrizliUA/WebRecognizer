@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('video_feed/', views.video_feed, name='video_feed'),
+    path('control_feed/<str:action>/', views.control_feed, name='control_feed'),
 ]

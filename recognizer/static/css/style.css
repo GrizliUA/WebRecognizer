@@ -9,10 +9,29 @@ header, footer {
     text-align: center;
     padding: 1em 0;
 }
+nav {
+    background-color: #444;
+    padding: 1em;
+    text-align: center;
+}
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
 main {
     padding: 20px;
     text-align: center;
 }
 img {
     border: 2px solid #333;
+}
+.controls {
+    margin-top: 20px;
+}
+.controls button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
 }

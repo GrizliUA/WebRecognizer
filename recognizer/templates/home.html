@@ -6,6 +6,12 @@
     <main>
         <h2>Real-time Object Detection</h2>
         <img src="{% url 'video_feed' %}" width="800"/>
+        <script src="/static/js/control.js"></script>
+        <div class="controls">
+            <button onclick="controlFeed('pause')">Pause</button>
+            <button onclick="controlFeed('resume')">Resume</button>
+            <button onclick="controlFeed('reload')">Reload</button>
+        </div>
     </main>
     {% include "blocks/footer.html" %}
 </body>
