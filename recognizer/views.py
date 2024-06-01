@@ -4,35 +4,39 @@ import cv2
 from ultralytics import YOLO
 import random
 import time
+from collections import defaultdict
 
-# Завантаження моделі YOLO
+# Load YOLO model
 model = YOLO('yolov5nu.pt')
 model.info()
 
-# Визначення кольорів для різних класів
+# Define colors for different classes
 COLORS = {}
 for i in range(0, 80):
     COLORS[i] = [random.randint(0, 255) for _ in range(3)]
 
-# Статус паузи
+# Feed status and history of identified items
 class FeedStatus:
     paused = False
+    identified_items_history = defaultdict(int)
+    current_items = []
 
 def gen_frames(source=0):
-    cap = cv2.VideoCapture(source)  # Захоплення з веб-камери або відео
+    cap = cv2.VideoCapture(source)  # Capture from webcam or video
     while True:
         if FeedStatus.paused:
             time.sleep(0.1)
             continue
 
-        success, frame = cap.read()  # Зчитування кадру
+        success, frame = cap.read()  # Read frame
         if not success:
             break
         else:
-            # Відзеркалення зображення
+            # Mirror the image
             frame = cv2.flip(frame, 1)
-            
-            results = model(frame)  # Виконання YOLO на кадрі
+
+            FeedStatus.current_items.clear()  # Clear current items list
+            results = model(frame)  # Perform YOLO on frame
             for result in results:
                 for box in result.boxes:
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
@@ -40,8 +44,11 @@ def gen_frames(source=0):
                     cls = int(box.cls[0])
                     label = model.names[cls]
                     color = COLORS[cls]
+                    
+                    FeedStatus.identified_items_history[label] += 1
+                    FeedStatus.current_items.append(label)
 
-                    # Малювання рамок і підписів
+                    # Draw bounding boxes and labels
                     cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
                     cv2.putText(frame, f'{label} {conf:.2f}', (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
@@ -54,11 +61,16 @@ def video_feed(request):
     return StreamingHttpResponse(gen_frames(0), content_type='multipart/x-mixed-replace; boundary=frame')
 
 def video_file_feed(request):
-    video_path = 'path/to/your/video.mp4'  # Замініть на шлях до вашого відеофайлу
+    video_path = 'path/to/your/video.mp4'  # Replace with your video file path
     return StreamingHttpResponse(gen_frames(video_path), content_type='multipart/x-mixed-replace; boundary=frame')
 
 def home(request):
-    return render(request, 'home.html')
+    identified_items_history = dict(FeedStatus.identified_items_history)  # Convert to a regular dictionary
+    current_items = list(FeedStatus.current_items)  # Convert to a list
+    return render(request, 'home.html', {
+        'identified_items_history': identified_items_history,
+        'current_items': current_items
+    })
 
 def control_feed(request, action):
     if action == 'pause':

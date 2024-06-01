@@ -21,7 +21,18 @@ nav a {
     font-weight: bold;
 }
 main {
+    display: flex;
     padding: 20px;
+}
+.sidebar {
+    width: 20%;
+    padding: 10px;
+}
+.content {
+    width: 60%;
+    text-align: center;
+}
+.sidebar h3 {
     text-align: center;
 }
 img {
