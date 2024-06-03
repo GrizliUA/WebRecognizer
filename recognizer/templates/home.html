@@ -5,14 +5,7 @@
     {% include "blocks/header.html" %}
     <main>
         <script src="/static/js/control.js"></script>
-        <div class="sidebar">
-            <h3>History of Identified Items</h3>
-            <ul>
-                {% for item, count in identified_items_history.items %}
-                    <li>{{ item }}: {{ count }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% include "blocks/sidebar_hist.html" %}
         <div class="content">
             <h2>Real-time Object Detection</h2>
             <img src="{% url 'video_feed' %}" width="800"/>
@@ -22,14 +15,7 @@
                 <button onclick="controlFeed('reload')">Reload</button>
             </div>
         </div>
-        <div class="sidebar">
-            <h3>Currently Identified Items</h3>
-            <ul>
-                {% for item in current_items %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% include "blocks/sidebar_curr.html" %}
     </main>
     {% include "blocks/footer.html" %}
 </body>

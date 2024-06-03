@@ -4,7 +4,7 @@ import cv2
 from ultralytics import YOLO
 import random
 import time
-from collections import defaultdict
+from collections import deque
 
 # Load YOLO model
 model = YOLO('yolov5nu.pt')
@@ -18,7 +18,7 @@ for i in range(0, 80):
 # Feed status and history of identified items
 class FeedStatus:
     paused = False
-    identified_items_history = defaultdict(int)
+    identified_items_history = deque(maxlen=25)
     current_items = []
 
 def gen_frames(source=0):
@@ -44,8 +44,8 @@ def gen_frames(source=0):
                     cls = int(box.cls[0])
                     label = model.names[cls]
                     color = COLORS[cls]
-                    
-                    FeedStatus.identified_items_history[label] += 1
+
+                    FeedStatus.identified_items_history.appendleft(label)  # Add to history
                     FeedStatus.current_items.append(label)
 
                     # Draw bounding boxes and labels
@@ -65,7 +65,7 @@ def video_file_feed(request):
     return StreamingHttpResponse(gen_frames(video_path), content_type='multipart/x-mixed-replace; boundary=frame')
 
 def home(request):
-    identified_items_history = dict(FeedStatus.identified_items_history)  # Convert to a regular dictionary
+    identified_items_history = list(FeedStatus.identified_items_history)  # Convert deque to list
     current_items = list(FeedStatus.current_items)  # Convert to a list
     return render(request, 'home.html', {
         'identified_items_history': identified_items_history,
