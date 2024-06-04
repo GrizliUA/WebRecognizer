@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'recognizer',
+    'recognizer', # Додаток для розпізнавання об'єктів
 ]
 
 MIDDLEWARE = [
