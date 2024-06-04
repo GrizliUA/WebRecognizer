@@ -5,7 +5,6 @@
     {% include "blocks/header.html" %}
     <main>
         <script src="/static/js/control.js"></script>
-        {% include "blocks/sidebar_hist.html" %}
         <div class="content">
             <h2>Real-time Object Detection</h2>
             <img src="{% url 'video_feed' %}" width="800"/>
@@ -15,8 +14,9 @@
                 <button onclick="controlFeed('reload')">Reload</button>
             </div>
         </div>
-        {% include "blocks/sidebar_curr.html" %}
+        {% include "blocks/identified.html" %}
     </main>
     {% include "blocks/footer.html" %}
+    <script src="/static/js/items_update.js"></script>
 </body>
 </html>

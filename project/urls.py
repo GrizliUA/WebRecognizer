@@ -19,8 +19,8 @@ from django.urls import path
 from recognizer import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
     path('video_feed/', views.video_feed, name='video_feed'),
     path('control_feed/<str:action>/', views.control_feed, name='control_feed'),
+    path('get_identified_items/', views.get_identified_items, name='get_identified_items'),
+    path('', views.home, name='home'),
 ]
