@@ -98,7 +98,7 @@ def gen_frames(source=0, fps=30):
             FeedStatus.identified_items.appendleft(list(FeedStatus.current_items))
             FeedStatus.total_frames += 1
 
-            ret, buffer = cv2.imencode('.jpg', frame)
+            _, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
