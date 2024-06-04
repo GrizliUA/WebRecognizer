@@ -46,3 +46,8 @@ img {
     padding: 10px 20px;
     font-size: 16px;
 }
+
+#identified-list {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove default padding */
+}
